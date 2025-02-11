@@ -1,0 +1,35 @@
+/* body{
+    background-color: #0F0A00;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+nav a {
+    color: #fff;
+}
+nav img {
+    padding-left: 20px;
+    width: 200px;
+    height: 100px;
+}
+nav ul {
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    width: 289px;
+    height: 60px;
+}
+nav ul li {
+    margin: 5px;
+    padding: 11px;
+    border-radius: 7px;
+    border: 1px solid #2D2D2D;
+    background-color: #2D2D2D;
+}
+#lang {
+    border: none;
+    appearance: none;
+    outline: none;
+    background-color: #2D2D2D;
+} */
