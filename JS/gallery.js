@@ -15,6 +15,35 @@ function checkImageExists(imageId) {
   });
 }
 
+// Function to open image in a gallery popup with swipe support
+function openGallery(imageSrc) {
+  const galleryOverlay = document.createElement("div");
+  galleryOverlay.id = "gallery-overlay";
+  galleryOverlay.innerHTML = `
+    <div class="gallery-content">
+      <img id="gallery-image" src="${imageSrc}" />
+      <button id="prev-image">&#10094;</button>
+      <button id="next-image">&#10095;</button>
+      <button id="close-gallery">&times;</button>
+    </div>
+  `;
+  document.body.appendChild(galleryOverlay);
+  
+  const images = Array.from(document.querySelectorAll(".image-wrapper img"));
+  let currentIndex = images.findIndex(img => img.src === imageSrc);
+  
+  function updateImage(index) {
+    if (index >= 0 && index < images.length) {
+      document.getElementById("gallery-image").src = images[index].src;
+      currentIndex = index;
+    }
+  }
+
+  document.getElementById("prev-image").addEventListener("click", () => updateImage(currentIndex - 1));
+  document.getElementById("next-image").addEventListener("click", () => updateImage(currentIndex + 1));
+  document.getElementById("close-gallery").addEventListener("click", () => galleryOverlay.remove());
+}
+
 // Function to load images dynamically
 async function loadImages() {
   const gallery = document.getElementById("gallery-container");
@@ -36,9 +65,7 @@ async function loadImages() {
 
     const imageHTML = `
       <div class="image-wrapper">
-        <a href="${generateImageUrl(imageId)}" data-featherlight="image" class="col-3 wow fadeIn" data-wow-delay="${0.1 * i}s">
-          <img src="${generateImageUrl(imageId)}" alt="Image ${imageId}" />
-        </a>
+        <img src="${generateImageUrl(imageId)}" alt="Image ${imageId}" onclick="openGallery('${generateImageUrl(imageId)}')" />
       </div>
     `;
 
@@ -56,8 +83,11 @@ async function loadImages() {
   gallery.innerHTML = `
     <div class="row clearfix">
       <div class="col-1">
+        <h2>Gallery</h2>
         <div id="popup-gallery">${imageElements}</div>
         <div id="hidden-gallery" style="display: none;">${hiddenImages}</div>
+        <button id="show-more">Show More</button>
+        <button id="show-less" style="display: none;">Show Less</button>
       </div>
     </div>
   `;
