@@ -49,39 +49,60 @@ footer {
     text-decoration: none;
 }
 
-/* Gallery container styling */
+/* General styles for the gallery */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, minmax(550px, 1fr)); /* 4 columns, bigger size */
-  grid-auto-flow: row; /* Fill row first before moving to the next */
-  gap: 45px; /* Space between images */
-  margin-top: 30px;
-  justify-content: start; /* Align items to the left */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 20px;
 }
 
-/* Individual image wrapper */
 .image-wrapper {
   position: relative;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 8px;
   transition: transform 0.3s ease-in-out;
+}
+
+.image-wrapper:hover {
+  transform: scale(1.05);
 }
 
 .image-wrapper img {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 10px;
-  transition: transform 0.3s ease-in-out;
+  border-radius: 8px;
 }
 
-/* Hover effect for images */
-.image-wrapper:hover {
-  transform: scale(1.05);
+/* Styles for the hidden gallery */
+#hidden-gallery {
+  display: none;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding-top: 10px;
 }
 
-/* Gallery popup styling */
+/* Buttons styling */
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Gallery overlay popup */
 #gallery-overlay {
   position: fixed;
   top: 0;
@@ -97,70 +118,32 @@ footer {
 
 .gallery-content {
   position: relative;
-  max-width: 90%;
-  max-height: 90%;
+  text-align: center;
 }
 
-#gallery-image {
-  max-width: 100%;
+.gallery-content img {
+  max-width: 80vw;
   max-height: 80vh;
   border-radius: 10px;
 }
 
-/* Navigation buttons */
-#prev-image,
-#next-image,
-#close-gallery {
+#prev-image, #next-image, #close-gallery {
   position: absolute;
-  background: rgba(255, 255, 255, 0.6);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.7);
   border: none;
   font-size: 24px;
-  cursor: pointer;
   padding: 10px;
-  border-radius: 50%;
-  transition: background 0.3s ease-in-out;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-#prev-image:hover,
-#next-image:hover,
-#close-gallery:hover {
-  background: white;
-}
-
-#prev-image {
-  left: 10px;
-}
-
-#next-image {
-  right: 10px;
-}
-
+#prev-image { left: 10px; }
+#next-image { right: 10px; }
 #close-gallery {
   top: 10px;
   right: 10px;
-}
-
-/* Initially hide extra images */
-#hidden-gallery {
-  display: none;
-}
-
-/* Show more/less button styling */
-#show-more,
-#show-less {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  font-size: 16px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out;
-}
-
-#show-more:hover,
-#show-less:hover {
-  background: #0056b3;
+  transform: none;
+  font-size: 30px;
 }
