@@ -52,7 +52,7 @@ footer {
 /* General styles for the gallery */
 .grid-container {
   display: grid;
-  grid-template-rows: repeat(auto-fit, minmax(5, 1fr)); /* Flexible grid with minimum 200px width */
+  grid-template-columns: repeat(4, 1fr); /* 5 columns per row */
   gap: 10px; /* Space between images */
   padding: 20px;
 }
