@@ -52,7 +52,8 @@ footer {
 /* General styles for the gallery */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Flexible grid with minimum 200px width */
+  grid-template-rows: repeat(auto-fit, minmax(5, 1fr)); /* Flexible grid with minimum 200px width */
+  grid-auto-flow: column;
   gap: 10px; /* Space between images */
   padding: 20px;
 }
@@ -122,11 +123,13 @@ button:hover {
 .gallery-content {
   position: relative;
   text-align: center;
+  max-width: 90vw;
+  max-height: 90vh;
 }
 
 .gallery-content img {
-  max-width: 300px;
-  max-height: 150px;
+  max-width: 90vw;
+  max-height: 90vh;
   border-radius: 10px;
 }
 
