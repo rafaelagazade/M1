@@ -52,7 +52,8 @@ footer {
 /* General styles for the gallery */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Larger images in a flexible row layout */
+  grid-auto-flow: column; /* Forces images into a single row */
+  overflow-x: auto; /* Adds horizontal scroll if images overflow */
   gap: 10px;
   padding: 20px;
 }
@@ -63,6 +64,8 @@ footer {
   overflow: hidden;
   border-radius: 8px;
   transition: transform 0.3s ease-in-out;
+  width: 300px; /* Fixed width for each image wrapper */
+  height: 200px; /* Fixed height for each image wrapper */
 }
 
 .image-wrapper:hover {
@@ -71,7 +74,8 @@ footer {
 
 .image-wrapper img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover; /* Ensures images fill the container without distortion */
   display: block;
   border-radius: 8px;
 }
@@ -79,7 +83,8 @@ footer {
 /* Styles for the hidden gallery */
 #hidden-gallery {
   display: none;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Same grid structure for hidden gallery */
+  grid-auto-flow: column; /* Same single row layout for hidden gallery */
+  overflow-x: auto;
   gap: 10px;
   padding-top: 10px;
 }
