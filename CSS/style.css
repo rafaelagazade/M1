@@ -91,17 +91,17 @@ footer {
   text-decoration: none;
 }
 
-/* Updated gallery layout to show images in rows */
-.popup-gallery {
+/* Gallery container with 4 columns per row */
+.gallery-container {
   display: grid;
-  grid-template-rows: repeat(4, auto); /* Creates 4 rows */
-  grid-auto-flow: row; /* Ensures images are placed row by row */
-  gap: 10px;
-  justify-content: center;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 10px; /* Space between images */
   padding: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Image styling */
+/* Ensure all images are the same size */
 .image-wrapper {
   position: relative;
   cursor: pointer;
@@ -109,7 +109,7 @@ footer {
   border-radius: 8px;
   transition: transform 0.3s ease-in-out;
   width: 100%;
-  aspect-ratio: 3 / 2; /* Maintain aspect ratio */
+  aspect-ratio: 4 / 3; /* Ensures images have the same aspect ratio */
 }
 
 .image-wrapper:hover {
@@ -124,11 +124,10 @@ footer {
   border-radius: 8px;
 }
 
-/* Hidden gallery should also follow row-based layout */
+/* Hidden gallery follows the same 4-column layout */
 #hidden-gallery {
   display: none;
-  grid-template-rows: repeat(auto-fit, minmax(150px, 1fr)); /* Flexible rows */
-  grid-auto-flow: row;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   padding-top: 10px;
 }
