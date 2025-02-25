@@ -64,9 +64,7 @@ async function loadImages() {
     }
 
     const imageHTML = `
-      <div class="image-wrapper">
         <img src="${generateImageUrl(imageId)}" alt="Image ${imageId}" onclick="openGallery('${generateImageUrl(imageId)}')" />
-      </div>
     `;
 
     if (successfullyLoadedImages < 6) {
