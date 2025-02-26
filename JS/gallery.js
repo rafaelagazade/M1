@@ -13,13 +13,19 @@ async function checkImageExists(imageId) {
   });
 }
 
-function openGallery(imageSrc, images, currentIndex) {
+let currentGalleryIndex = 0;
+let galleryImages = [];
+
+function openGallery(imageSrc, images, index) {
+  galleryImages = images;
+  currentGalleryIndex = index;
+
   const galleryOverlay = document.createElement("div");
   galleryOverlay.id = "gallery-overlay";
   galleryOverlay.innerHTML = `
     <div class="gallery-content">
-      <img id="gallery-image" src="${imageSrc}" />
       <button id="prev-image">&#10094;</button>
+      <img id="gallery-image" src="${imageSrc}" />
       <button id="next-image">&#10095;</button>
       <button id="close-gallery">&times;</button>
     </div>
@@ -27,19 +33,19 @@ function openGallery(imageSrc, images, currentIndex) {
   document.body.appendChild(galleryOverlay);
 
   function updateImage(index) {
-    if (index >= 0 && index < images.length) {
+    if (index >= 0 && index < galleryImages.length) {
       const imgElement = document.getElementById("gallery-image");
-      imgElement.style.transform = "scale(0.8)";
+      imgElement.style.opacity = "0";
       setTimeout(() => {
-        imgElement.src = images[index];
-        imgElement.style.transform = "scale(1)";
-      }, 100);
-      currentIndex = index;
+        imgElement.src = galleryImages[index];
+        imgElement.style.opacity = "1";
+      }, 200);
+      currentGalleryIndex = index;
     }
   }
 
-  document.getElementById("prev-image").addEventListener("click", () => updateImage(currentIndex - 1));
-  document.getElementById("next-image").addEventListener("click", () => updateImage(currentIndex + 1));
+  document.getElementById("prev-image").addEventListener("click", () => updateImage(currentGalleryIndex - 1));
+  document.getElementById("next-image").addEventListener("click", () => updateImage(currentGalleryIndex + 1));
   document.getElementById("close-gallery").addEventListener("click", () => galleryOverlay.remove());
 }
 
@@ -123,7 +129,7 @@ document.head.insertAdjacentHTML("beforeend", `
     #gallery-image {
       max-width: 80vw;
       max-height: 80vh;
-      transition: transform 0.3s ease-in-out;
+      transition: opacity 0.3s ease-in-out;
     }
     #prev-image, #next-image, #close-gallery {
       position: absolute;
