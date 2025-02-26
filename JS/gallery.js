@@ -46,7 +46,7 @@ function openGallery(imageSrc) {
 
 // Function to load images dynamically
 async function loadImages() {
-  const gallery = document.getElementById("gallery-container");
+  const gallery = document.getElementById("gallery-main");
   gallery.innerHTML = ""; // Clear previous images
 
   let highestId = 0;
@@ -79,8 +79,6 @@ async function loadImages() {
   }
 
   gallery.innerHTML = `
-    <div class="row clearfix">
-    </div>
   `;
 
   console.log(`Successfully loaded ${successfullyLoadedImages} images.`);
