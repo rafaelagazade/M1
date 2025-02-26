@@ -78,8 +78,13 @@ async function loadImages() {
     console.log(`Successfully loaded ${imageId}`);
   }
 
-  gallery.innerHTML = `
-  `;
+  gallery.innerHTML = ` <div id="gallery-main">
+                                
+                            </div>
+                            <div id="popup-gallery"></div>
+                            <div id="hidden-gallery" style="display: none;"></div>
+                            <button id="show-more">Show More</button>
+                            <button id="show-less" style="display: none;">Show Less</button> `;
 
   console.log(`Successfully loaded ${successfullyLoadedImages} images.`);
   console.log("Highest ID found:", highestId);
