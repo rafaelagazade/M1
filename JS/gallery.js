@@ -28,7 +28,12 @@ function openGallery(imageSrc, images, currentIndex) {
 
   function updateImage(index) {
     if (index >= 0 && index < images.length) {
-      document.getElementById("gallery-image").src = images[index];
+      const imgElement = document.getElementById("gallery-image");
+      imgElement.style.transform = "scale(0.8)";
+      setTimeout(() => {
+        imgElement.src = images[index];
+        imgElement.style.transform = "scale(1)";
+      }, 100);
       currentIndex = index;
     }
   }
@@ -80,7 +85,6 @@ async function loadImages() {
 
 document.addEventListener("DOMContentLoaded", loadImages);
 
-// CSS for Gallery Styling
 document.head.insertAdjacentHTML("beforeend", `
   <style>
     #gallery-main, #hidden-gallery {
@@ -113,10 +117,13 @@ document.head.insertAdjacentHTML("beforeend", `
     }
     .gallery-content {
       position: relative;
+      display: flex;
+      align-items: center;
     }
     #gallery-image {
       max-width: 80vw;
       max-height: 80vh;
+      transition: transform 0.3s ease-in-out;
     }
     #prev-image, #next-image, #close-gallery {
       position: absolute;
@@ -126,8 +133,8 @@ document.head.insertAdjacentHTML("beforeend", `
       cursor: pointer;
       padding: 10px;
     }
-    #prev-image { left: -50px; top: 50%; }
-    #next-image { right: -50px; top: 50%; }
+    #prev-image { left: 10px; top: 50%; transform: translateY(-50%); }
+    #next-image { right: 10px; top: 50%; transform: translateY(-50%); }
     #close-gallery { top: 10px; right: 10px; }
   </style>
 `);
