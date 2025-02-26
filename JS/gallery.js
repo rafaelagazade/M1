@@ -1,12 +1,10 @@
 const cloudName = "dcn07mkj4"; // Your Cloudinary Cloud Name
 
-// Function to generate Cloudinary URL dynamically
 function generateImageUrl(imageId) {
   return `https://res.cloudinary.com/${cloudName}/image/upload/${imageId}.png`;
 }
 
-// Function to check if an image exists
-function checkImageExists(imageId) {
+async function checkImageExists(imageId) {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => resolve(true);
@@ -15,8 +13,7 @@ function checkImageExists(imageId) {
   });
 }
 
-// Function to open image in a gallery popup with swipe support
-function openGallery(imageSrc) {
+function openGallery(imageSrc, images, currentIndex) {
   const galleryOverlay = document.createElement("div");
   galleryOverlay.id = "gallery-overlay";
   galleryOverlay.innerHTML = `
@@ -28,13 +25,10 @@ function openGallery(imageSrc) {
     </div>
   `;
   document.body.appendChild(galleryOverlay);
-  
-  const images = Array.from(document.querySelectorAll(".image-wrapper img"));
-  let currentIndex = images.findIndex(img => img.src === imageSrc);
-  
+
   function updateImage(index) {
     if (index >= 0 && index < images.length) {
-      document.getElementById("gallery-image").src = images[index].src;
+      document.getElementById("gallery-image").src = images[index];
       currentIndex = index;
     }
   }
@@ -44,100 +38,96 @@ function openGallery(imageSrc) {
   document.getElementById("close-gallery").addEventListener("click", () => galleryOverlay.remove());
 }
 
-// Function to load images dynamically
 async function loadImages() {
-  const gallery = document.getElementById("gallery-main");
-  gallery.innerHTML = ""; // Clear previous images
+  const galleryMain = document.getElementById("gallery-main");
+  const hiddenGallery = document.getElementById("hidden-gallery");
+  galleryMain.innerHTML = "";
+  hiddenGallery.innerHTML = "";
 
-  let highestId = 0;
   let successfullyLoadedImages = 0;
-  let imageElements = "";
-  let hiddenImages = "";
+  let imagesArray = [];
 
   for (let i = 1; i <= 99; i++) {
-    const imageId = `ID${String(i).padStart(6, "0")}`; // Format as ID000001, ID000002, etc.
-
+    const imageId = `ID${String(i).padStart(6, "0")}`;
     const exists = await checkImageExists(imageId);
-    if (!exists) {
-      console.log(`Image ${imageId} not found. Stopping search.`);
-      break; // Stop searching for more images
-    }
+    if (!exists) break;
 
-    const imageHTML = `
-        <img src="${generateImageUrl(imageId)}" alt="Image ${imageId}" onclick="openGallery('${generateImageUrl(imageId)}')" />
-    `;
+    const imageUrl = generateImageUrl(imageId);
+    imagesArray.push(imageUrl);
+    const imageElement = `<img class="gallery-image" src="${imageUrl}" alt="Image ${imageId}" onclick="openGallery('${imageUrl}', ${JSON.stringify(imagesArray)}, ${i - 1})" />`;
 
     if (successfullyLoadedImages < 6) {
-      imageElements += imageHTML;
+      galleryMain.innerHTML += imageElement;
     } else {
-      hiddenImages += imageHTML;
+      hiddenGallery.innerHTML += imageElement;
     }
 
     successfullyLoadedImages++;
-    highestId = i; // Update highestId correctly
-    console.log(`Successfully loaded ${imageId}`);
   }
 
-  gallery.innerHTML = ` <div id="gallery-main">
-                                
-                            </div>
-                            <div id="popup-gallery"></div>
-                            <div id="hidden-gallery" style="display: none;"></div>
-                            <button id="show-more">Show More</button>
-                            <button id="show-less" style="display: none;">Show Less</button> `;
-
-  console.log(`Successfully loaded ${successfullyLoadedImages} images.`);
-  console.log("Highest ID found:", highestId);
-  window.nextImageId = `ID${String(highestId + 1).padStart(6, "0")}`;
-  console.log("Next available ID for upload:", window.nextImageId);
-
   document.getElementById("show-more").addEventListener("click", function () {
-    document.getElementById("hidden-gallery").style.display = "block";
+    hiddenGallery.style.display = "block";
     this.style.display = "none";
     document.getElementById("show-less").style.display = "block";
   });
 
   document.getElementById("show-less").addEventListener("click", function () {
-    document.getElementById("hidden-gallery").style.display = "none";
+    hiddenGallery.style.display = "none";
     this.style.display = "none";
     document.getElementById("show-more").style.display = "block";
   });
 }
 
-// Function to upload an image
-function uploadImage() {
-  const fileInput = document.getElementById("imageUpload");
-  const file = fileInput.files[0];
+document.addEventListener("DOMContentLoaded", loadImages);
 
-  if (!file) {
-    alert("Please select an image to upload.");
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", "ml_default");
-  const imageId = window.nextImageId || "ID000001";
-  formData.append("public_id", imageId);
-
-  fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.secure_url) {
-        console.log("Image uploaded successfully", data.secure_url);
-        loadImages(); // Reload images after upload
-      } else {
-        alert("Error uploading image.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error uploading image", error);
-      alert("Error uploading image.");
-    });
-}
-
-// Load images when the page loads
-window.onload = loadImages;
+// CSS for Gallery Styling
+document.head.insertAdjacentHTML("beforeend", `
+  <style>
+    #gallery-main, #hidden-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .gallery-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .gallery-image:hover {
+      transform: scale(1.1);
+    }
+    #gallery-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .gallery-content {
+      position: relative;
+    }
+    #gallery-image {
+      max-width: 80vw;
+      max-height: 80vh;
+    }
+    #prev-image, #next-image, #close-gallery {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 10px;
+    }
+    #prev-image { left: -50px; top: 50%; }
+    #next-image { right: -50px; top: 50%; }
+    #close-gallery { top: 10px; right: 10px; }
+  </style>
+`);
