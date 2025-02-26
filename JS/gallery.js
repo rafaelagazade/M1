@@ -80,13 +80,6 @@ async function loadImages() {
 
   gallery.innerHTML = `
     <div class="row clearfix">
-      <div class="col-1">
-        <h2>Gallery</h2>
-        <div id="popup-gallery">${imageElements}</div>
-        <div id="hidden-gallery" style="display: none;">${hiddenImages}</div>
-        <button id="show-more">Show More</button>
-        <button id="show-less" style="display: none;">Show Less</button>
-      </div>
     </div>
   `;
 
